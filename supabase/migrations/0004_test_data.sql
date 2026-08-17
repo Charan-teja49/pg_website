@@ -64,7 +64,6 @@ values
   ('6543200019', 'Ramya Sundaram',        4, 'B.Sc',   'BSC2024055', '9123450019', 'Bachelor of Science',                 '234511110019', 'Vegetarian Jain food',              'active'),
   ('6543200020', 'Pooja Iyengar',         4, 'BBA',    'BBA2023117', '9123450020', 'Business Administration',             '234511110020', null,                                'active');
 
-
 -- ============================================================
 -- 2. BED ASSIGNMENTS — 14 of 20 students get a bed
 -- ============================================================
@@ -84,138 +83,328 @@ values
 -- Beds are looked up by (building_id, unit label, bed label)
 -- so we don't depend on auto-increment ordering.
 
--- Chalapathi Main: F-001 (Aarav, Vivek), F-002 (Karthik), F-005 (Pradeep)
-with picked as (
-  select b.id as bed_id, s.id as student_id
-    from beds b join units u on u.id = b.unit_id join students s on s.mobile = '9876500001'
-   where u.label = 'F-001' and u.building_id = 1 and b.label = 'Bed 1'
-   limit 1
-)
-update beds set is_occupied = true, student_id = picked.student_id
-  from picked where beds.id = picked.bed_id;
-update students set bed_id = (select id from beds b join units u on u.id = b.unit_id where u.label='F-001' and u.building_id=1 and b.label='Bed 1')
-  where mobile = '9876500001';
+-- Chalapathi Main: F-001 (Aarav, Vivek), F-002 (Rahul), F-005 (Pradeep)
 
 with picked as (
   select b.id as bed_id, s.id as student_id
-    from beds b join units u on u.id = b.unit_id join students s on s.mobile = '9876500002'
-   where u.label = 'F-001' and u.building_id = 1 and b.label = 'Bed 2'
+    from beds b
+    join units u on u.id = b.unit_id
+    join students s on s.mobile = '9876500001'
+   where u.label = 'F-001'
+     and u.building_id = 1
+     and b.label = 'Bed 1'
    limit 1
 )
-update beds set is_occupied = true, student_id = picked.student_id
-  from picked where beds.id = picked.bed_id;
-update students set bed_id = (select id from beds b join units u on u.id = b.unit_id where u.label='F-001' and u.building_id=1 and b.label='Bed 2')
-  where mobile = '9876500002';
+update beds
+   set is_occupied = true,
+       student_id = picked.student_id
+  from picked
+ where beds.id = picked.bed_id;
+
+update students
+   set bed_id = (
+     select b.id
+       from beds b
+       join units u on u.id = b.unit_id
+      where u.label = 'F-001'
+        and u.building_id = 1
+        and b.label = 'Bed 1'
+   )
+ where mobile = '9876500001';
+
 
 with picked as (
   select b.id as bed_id, s.id as student_id
-    from beds b join units u on u.id = b.unit_id join students s on s.mobile = '9876500004'
-   where u.label = 'F-002' and u.building_id = 1 and b.label = 'Bed 1'
+    from beds b
+    join units u on u.id = b.unit_id
+    join students s on s.mobile = '9876500002'
+   where u.label = 'F-001'
+     and u.building_id = 1
+     and b.label = 'Bed 2'
    limit 1
 )
-update beds set is_occupied = true, student_id = picked.student_id
-  from picked where beds.id = picked.bed_id;
-update students set bed_id = (select id from beds b join units u on u.id = b.unit_id where u.label='F-002' and u.building_id=1 and b.label='Bed 1')
-  where mobile = '9876500004';
+update beds
+   set is_occupied = true,
+       student_id = picked.student_id
+  from picked
+ where beds.id = picked.bed_id;
+
+update students
+   set bed_id = (
+     select b.id
+       from beds b
+       join units u on u.id = b.unit_id
+      where u.label = 'F-001'
+        and u.building_id = 1
+        and b.label = 'Bed 2'
+   )
+ where mobile = '9876500002';
+
 
 with picked as (
   select b.id as bed_id, s.id as student_id
-    from beds b join units u on u.id = b.unit_id join students s on s.mobile = '9876500005'
-   where u.label = 'F-005' and u.building_id = 1 and b.label = 'Bed 1'
+    from beds b
+    join units u on u.id = b.unit_id
+    join students s on s.mobile = '9876500004'
+   where u.label = 'F-002'
+     and u.building_id = 1
+     and b.label = 'Bed 1'
    limit 1
 )
-update beds set is_occupied = true, student_id = picked.student_id
-  from picked where beds.id = picked.bed_id;
-update students set bed_id = (select id from beds b join units u on u.id = b.unit_id where u.label='F-005' and u.building_id=1 and b.label='Bed 1')
-  where mobile = '9876500005';
+update beds
+   set is_occupied = true,
+       student_id = picked.student_id
+  from picked
+ where beds.id = picked.bed_id;
 
--- Stanza: Ananya in S-1A-R1 Bed 1, Priya in S-1A-R1 Bed 2,
---         Sneha in S-2A-R1 Bed 1, Rohan in S-3B-R2 Bed 1
-with picked as (
-  select b.id as bed_id, s.id as student_id
-    from beds b join units u on u.id = b.unit_id join students s on s.mobile = '8765400007'
-   where u.label = 'S-1A-R1' and u.building_id = 2 and b.label = 'Bed 1'
-   limit 1
-)
-update beds set is_occupied = true, student_id = picked.student_id
-  from picked where beds.id = picked.bed_id;
-update students set bed_id = (select id from beds b join units u on u.id = b.unit_id where u.label='S-1A-R1' and u.building_id=2 and b.label='Bed 1')
-  where mobile = '8765400007';
+update students
+   set bed_id = (
+     select b.id
+       from beds b
+       join units u on u.id = b.unit_id
+      where u.label = 'F-002'
+        and u.building_id = 1
+        and b.label = 'Bed 1'
+   )
+ where mobile = '9876500004';
 
-with picked as (
-  select b.id as bed_id, s.id as student_id
-    from beds b join units u on u.id = b.unit_id join students s on s.mobile = '8765400008'
-   where u.label = 'S-1A-R1' and u.building_id = 2 and b.label = 'Bed 2'
-   limit 1
-)
-update beds set is_occupied = true, student_id = picked.student_id
-  from picked where beds.id = picked.bed_id;
-update students set bed_id = (select id from beds b join units u on u.id = b.unit_id where u.label='S-1A-R1' and u.building_id=2 and b.label='Bed 2')
-  where mobile = '8765400008';
 
 with picked as (
   select b.id as bed_id, s.id as student_id
-    from beds b join units u on u.id = b.unit_id join students s on s.mobile = '8765400009'
-   where u.label = 'S-2A-R1' and u.building_id = 2 and b.label = 'Bed 1'
+    from beds b
+    join units u on u.id = b.unit_id
+    join students s on s.mobile = '9876500005'
+   where u.label = 'F-005'
+     and u.building_id = 1
+     and b.label = 'Bed 1'
    limit 1
 )
-update beds set is_occupied = true, student_id = picked.student_id
-  from picked where beds.id = picked.bed_id;
-update students set bed_id = (select id from beds b join units u on u.id = b.unit_id where u.label='S-2A-R1' and u.building_id=2 and b.label='Bed 1')
-  where mobile = '8765400009';
+update beds
+   set is_occupied = true,
+       student_id = picked.student_id
+  from picked
+ where beds.id = picked.bed_id;
+
+update students
+   set bed_id = (
+     select b.id
+       from beds b
+       join units u on u.id = b.unit_id
+      where u.label = 'F-005'
+        and u.building_id = 1
+        and b.label = 'Bed 1'
+   )
+ where mobile = '9876500005';
+
+
+-- Stanza: Ananya in S-1A-R1 Bed 1,
+--         Priya in S-1A-R1 Bed 2,
+--         Sneha in S-2A-R1 Bed 1,
+--         Divya in S-3B-R2 Bed 1
 
 with picked as (
   select b.id as bed_id, s.id as student_id
-    from beds b join units u on u.id = b.unit_id join students s on s.mobile = '8765400010'
-   where u.label = 'S-3B-R2' and u.building_id = 2 and b.label = 'Bed 1'
+    from beds b
+    join units u on u.id = b.unit_id
+    join students s on s.mobile = '8765400007'
+   where u.label = 'S-1A-R1'
+     and u.building_id = 2
+     and b.label = 'Bed 1'
    limit 1
 )
-update beds set is_occupied = true, student_id = picked.student_id
-  from picked where beds.id = picked.bed_id;
-update students set bed_id = (select id from beds b join units u on u.id = b.unit_id where u.label='S-3B-R2' and u.building_id=2 and b.label='Bed 1')
-  where mobile = '8765400010';
+update beds
+   set is_occupied = true,
+       student_id = picked.student_id
+  from picked
+ where beds.id = picked.bed_id;
 
--- Villas: Arjun (Villa-1 Bed 1), Siddharth (Villa-1 Bed 2),
---         Akhil (Villa-2 Bed 1), Harish (Villa-3 Bed 5)
-with picked as (
-  select b.id as bed_id, s.id as student_id
-    from beds b join units u on u.id = b.unit_id join students s on s.mobile = '7654300012'
-   where u.label = 'Villa-1' and u.building_id = 3 and b.label = 'Bed 1'
-   limit 1
-)
-update beds set is_occupied = true, student_id = picked.student_id
-  from picked where beds.id = picked.bed_id;
-update students set bed_id = (select id from beds b join units u on u.id = b.unit_id where u.label='Villa-1' and u.building_id=3 and b.label='Bed 1')
-  where mobile = '7654300012';
+update students
+   set bed_id = (
+     select b.id
+       from beds b
+       join units u on u.id = b.unit_id
+      where u.label = 'S-1A-R1'
+        and u.building_id = 2
+        and b.label = 'Bed 1'
+   )
+ where mobile = '8765400007';
 
-with picked as (
-  select b.id as bed_id, s.id as student_id
-    from beds b join units u on u.id = b.unit_id join students s on s.mobile = '7654300013'
-   where u.label = 'Villa-1' and u.building_id = 3 and b.label = 'Bed 2'
-   limit 1
-)
-update beds set is_occupied = true, student_id = picked.student_id
-  from picked where beds.id = picked.bed_id;
-update students set bed_id = (select id from beds b join units u on u.id = b.unit_id where u.label='Villa-1' and u.building_id=3 and b.label='Bed 2')
-  where mobile = '7654300013';
 
 with picked as (
   select b.id as bed_id, s.id as student_id
-    from beds b join units u on u.id = b.unit_id join students s on s.mobile = '7654300015'
-   where u.label = 'Villa-2' and u.building_id = 3 and b.label = 'Bed 1'
+    from beds b
+    join units u on u.id = b.unit_id
+    join students s on s.mobile = '8765400008'
+   where u.label = 'S-1A-R1'
+     and u.building_id = 2
+     and b.label = 'Bed 2'
    limit 1
 )
-update beds set is_occupied = true, student_id = picked.student_id
-  from picked where beds.id = picked.bed_id;
-update students set bed_id = (select id from beds b join units u on u.id = b.unit_id where u.label='Villa-2' and u.building_id=3 and b.label='Bed 1')
-  where mobile = '7654300015';
+update beds
+   set is_occupied = true,
+       student_id = picked.student_id
+  from picked
+ where beds.id = picked.bed_id;
 
--- Siddha middle block has NO units seeded yet (admin builds them
--- via the Buildings settings page per 0002 comments). So we
--- cannot assign beds for the 4 Siddha students — they remain
--- on the waitlist. That's a realistic state for the UI to show.
--- (mobiles 6543200017..20 stay unassigned)
+update students
+   set bed_id = (
+     select b.id
+       from beds b
+       join units u on u.id = b.unit_id
+      where u.label = 'S-1A-R1'
+        and u.building_id = 2
+        and b.label = 'Bed 2'
+   )
+ where mobile = '8765400008';
 
+
+with picked as (
+  select b.id as bed_id, s.id as student_id
+    from beds b
+    join units u on u.id = b.unit_id
+    join students s on s.mobile = '8765400009'
+   where u.label = 'S-2A-R1'
+     and u.building_id = 2
+     and b.label = 'Bed 1'
+   limit 1
+)
+update beds
+   set is_occupied = true,
+       student_id = picked.student_id
+  from picked
+ where beds.id = picked.bed_id;
+
+update students
+   set bed_id = (
+     select b.id
+       from beds b
+       join units u on u.id = b.unit_id
+      where u.label = 'S-2A-R1'
+        and u.building_id = 2
+        and b.label = 'Bed 1'
+   )
+ where mobile = '8765400009';
+
+
+with picked as (
+  select b.id as bed_id, s.id as student_id
+    from beds b
+    join units u on u.id = b.unit_id
+    join students s on s.mobile = '8765400010'
+   where u.label = 'S-3B-R2'
+     and u.building_id = 2
+     and b.label = 'Bed 1'
+   limit 1
+)
+update beds
+   set is_occupied = true,
+       student_id = picked.student_id
+  from picked
+ where beds.id = picked.bed_id;
+
+update students
+   set bed_id = (
+     select b.id
+       from beds b
+       join units u on u.id = b.unit_id
+      where u.label = 'S-3B-R2'
+        and u.building_id = 2
+        and b.label = 'Bed 1'
+   )
+ where mobile = '8765400010';
+
+
+-- Villas: Arjun (Villa-1 Bed 1),
+--         Siddharth (Villa-1 Bed 2),
+--         Akhil (Villa-2 Bed 1),
+--         Harish (Villa-3 Bed 5)
+
+with picked as (
+  select b.id as bed_id, s.id as student_id
+    from beds b
+    join units u on u.id = b.unit_id
+    join students s on s.mobile = '7654300012'
+   where u.label = 'Villa-1'
+     and u.building_id = 3
+     and b.label = 'Bed 1'
+   limit 1
+)
+update beds
+   set is_occupied = true,
+       student_id = picked.student_id
+  from picked
+ where beds.id = picked.bed_id;
+
+update students
+   set bed_id = (
+     select b.id
+       from beds b
+       join units u on u.id = b.unit_id
+      where u.label = 'Villa-1'
+        and u.building_id = 3
+        and b.label = 'Bed 1'
+   )
+ where mobile = '7654300012';
+
+
+with picked as (
+  select b.id as bed_id, s.id as student_id
+    from beds b
+    join units u on u.id = b.unit_id
+    join students s on s.mobile = '7654300013'
+   where u.label = 'Villa-1'
+     and u.building_id = 3
+     and b.label = 'Bed 2'
+   limit 1
+)
+update beds
+   set is_occupied = true,
+       student_id = picked.student_id
+  from picked
+ where beds.id = picked.bed_id;
+
+update students
+   set bed_id = (
+     select b.id
+       from beds b
+       join units u on u.id = b.unit_id
+      where u.label = 'Villa-1'
+        and u.building_id = 3
+        and b.label = 'Bed 2'
+   )
+ where mobile = '7654300013';
+
+
+with picked as (
+  select b.id as bed_id, s.id as student_id
+    from beds b
+    join units u on u.id = b.unit_id
+    join students s on s.mobile = '7654300015'
+   where u.label = 'Villa-2'
+     and u.building_id = 3
+     and b.label = 'Bed 1'
+   limit 1
+)
+update beds
+   set is_occupied = true,
+       student_id = picked.student_id
+  from picked
+ where beds.id = picked.bed_id;
+
+update students
+   set bed_id = (
+     select b.id
+       from beds b
+       join units u on u.id = b.unit_id
+      where u.label = 'Villa-2'
+        and u.building_id = 3
+        and b.label = 'Bed 1'
+   )
+ where mobile = '7654300015';
+
+
+-- Siddha middle block has NO units seeded yet.
+-- The 4 Siddha students remain unassigned.
 
 -- ============================================================
 -- 3. FEE STRUCTURES — one row per student
