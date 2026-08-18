@@ -14,7 +14,7 @@
 //   node scripts/provision-auth.mjs
 
 const SUPABASE_URL =
-  process.env.SUPABASE_URL ?? 'https://nedgpqnytcmfocjwocds.supabase.co';
+  process.env.SUPABASE_URL ?? 'https://egedgyagfqdamzconjek.supabase.co';
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
 const WELCOME_PWD = process.env.PG_WELCOME_PASSWORD ?? 'Pg@Welcome123';
 
