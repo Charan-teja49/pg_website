@@ -1,3 +1,8 @@
+DEMO CREDENTIALS:
+
+admin: admin@gmail.com
+password: admin12345
+
 # PG — Hostel Management
 
 Multi-building hostel & PG management system.
