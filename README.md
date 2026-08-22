@@ -3,6 +3,9 @@ DEMO CREDENTIALS:
 admin: admin@gmail.com
 password: admin12345
 
+-student: 1111111111
+password: Welcome@123`
+
 # PG — Hostel Management
 
 Multi-building hostel & PG management system.
@@ -42,6 +45,8 @@ pnpm preview    # serves dist/ locally on :4173
 ```
 
 ## Demo credentials (until Supabase is wired)
+admin: admin@gmail.com
+password: admin12345
 
-- Admin: `12345` / `admin123`
-- Student: `9876543210` / `student123`
+-student: 1111111111
+password: Welcome@123`
